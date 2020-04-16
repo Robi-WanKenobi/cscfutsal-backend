@@ -12,6 +12,5 @@ RUN npm install
 
 # Bundle app source
 COPY . /CSCFUTSAL-BACKEND
-RUN ng build
 
 EXPOSE 3000
