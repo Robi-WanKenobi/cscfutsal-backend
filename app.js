@@ -12,12 +12,7 @@ app.use(bodyParser.urlencoded({ 'extended': 'false' }));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var corsOptions = {
-    origin: 'http://localhost:4200',
-    optionsSuccessStatus: 200
-}
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 mongoose.Promise = global.Promise;
 var options = {
