@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 var corsOptions = {
-    origin: 'http://localhost:80',
+    origin: 'http://localhost:4200',
     optionsSuccessStatus: 200
 }
 
