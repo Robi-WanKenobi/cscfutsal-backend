@@ -19,14 +19,6 @@ services:
      - "3000:3000"
     links:
      - mongo
-
-  front:
-    container_name: cscfutsal-frontend
-    build: ./CSCFUTSAL-FRONTEND
-    ports:
-      - "80:80"
-    links:
-      - cscfutsal-backend
      
 volumes:
   api-img:
