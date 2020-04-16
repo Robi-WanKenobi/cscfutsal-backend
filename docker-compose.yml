@@ -1,0 +1,33 @@
+version: '2'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:3.6.0
+    volumes:
+     - /data/db:/data/db
+    ports:
+     - "127.0.0.1:27017:27017"
+   
+  api:
+    container_name: cscfutsal-backend
+    restart: always
+    build: ./CSCFUTSAL-BACKEND
+    command: node ./bin/www
+    volumes:
+     - api-img:/CSCFUTSAL-BACKEND/public/plantillas
+    ports:
+     - "3000:3000"
+    links:
+     - mongo
+
+  front:
+    container_name: cscfutsal-frontend
+    build: ./CSCFUTSAL-FRONTEND
+    ports:
+      - "80:80"
+    links:
+      - cscfutsal-backend
+     
+volumes:
+  api-img:
+    driver: local
