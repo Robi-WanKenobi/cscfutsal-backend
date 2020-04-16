@@ -20,6 +20,7 @@ router.post('/', md_auth.ensureAuth, function(req, res) {
 
 /* GET ALL EQUIPOS */
 router.get('/', function(req, res, next) {
+    console.log(req);
     Equipo.find().populate('jugadores').sort({ orden: 1 }).exec(function(err, equipos) {
         if (err) return next(err);
         res.json(equipos);
