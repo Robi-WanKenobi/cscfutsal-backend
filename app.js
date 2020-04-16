@@ -30,7 +30,7 @@ var options = {
     bufferMaxEntries: 0
 };
 
-mongoose.connect('mongodb://mongodb/cscfutsaldb1920', options, function(err, res) {
+mongoose.connect('mongodb://mongo:27017/cscfutsaldb1920', options, function(err, res) {
     if (err) throw err;
     console.log('Connected to database');
 });
