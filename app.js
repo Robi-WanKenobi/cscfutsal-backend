@@ -49,10 +49,10 @@ var equipo = require('./api/controllers/equipoController');
 var admin = require('./api/controllers/adminController');
 var cronica = require('./api/controllers/cronicaController');
 
-app.use('/jugador', jugador);
-app.use('/equipo', equipo);
-app.use('/admin', admin);
-app.use('/cronica', cronica);
+app.use('/jugador', cors(corsOptions), jugador);
+app.use('/equipo', cors(corsOptions), equipo);
+app.use('/admin', cors(corsOptions), admin);
+app.use('/cronica', cors(corsOptions), cronica);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
