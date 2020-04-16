@@ -11,7 +11,7 @@ RUN cd /CSCFUTSAL-BACKEND
 RUN npm install
 
 # Bundle app source
-COPY . /CSCFUTSAL-BACKEND
+COPY ./cscfutsal-backend /CSCFUTSAL-BACKEND
 RUN ng build
 
 EXPOSE 3000
