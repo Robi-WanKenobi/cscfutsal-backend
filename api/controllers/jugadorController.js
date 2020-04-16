@@ -70,7 +70,7 @@ router.post('/image/:id', [md_auth.ensureAuth, md_upload], function(req, res) {
 
         console.log(req.files)
         var file_path = req.files.image.path;
-        var file_split = file_path.split('\\');
+        var file_split = file_path.split('\/');
         console.log(file_split)
         var file_name = file_split[2];
         var ext_split = file_path.split('\.');
