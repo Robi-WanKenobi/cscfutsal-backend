@@ -11,7 +11,7 @@ services:
   api:
     container_name: cscfutsal-backend
     restart: always
-    build: ./CSCFUTSAL-BACKEND
+    build: .
     command: node ./bin/www
     volumes:
      - api-img:/CSCFUTSAL-BACKEND/public/plantillas
