@@ -33,12 +33,6 @@ var equipo = require('./api/controllers/equipoController');
 var admin = require('./api/controllers/adminController');
 var cronica = require('./api/controllers/cronicaController');
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://cscfutsal.com");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-
 app.use('/jugador', jugador);
 app.use('/equipo', equipo);
 app.use('/admin', admin);
