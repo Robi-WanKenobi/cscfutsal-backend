@@ -3,6 +3,7 @@ var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var cors = require('cors')
 var app = express();
 
 app.use(logger('dev'));
@@ -10,6 +11,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ 'extended': 'false' }));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+var corsOptions = {
+    origin: '/cscfutsal\.com$/',
+    methods: "GET,POST,PUT,DELETE",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions));
 
 mongoose.Promise = global.Promise;
 var options = {
