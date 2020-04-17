@@ -3,7 +3,6 @@ var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var cors = require('cors')
 var app = express();
 
 app.use(logger('dev'));
@@ -11,21 +10,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ 'extended': 'false' }));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-var whitelist = ['http://localhost:4200', 'http://cscfutsal.com']
-var corsOptions = {
-    origin: function(origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    },
-    optionsSuccessStatus: 200
-}
-
-app.use(cors(corsOptions));
 
 mongoose.Promise = global.Promise;
 var options = {
@@ -49,10 +33,16 @@ var equipo = require('./api/controllers/equipoController');
 var admin = require('./api/controllers/adminController');
 var cronica = require('./api/controllers/cronicaController');
 
-app.use('/jugador', cors(corsOptions), jugador);
-app.use('/equipo', cors(corsOptions), equipo);
-app.use('/admin', cors(corsOptions), admin);
-app.use('/cronica', cors(corsOptions), cronica);
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://cscfutsal.com");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+app.use('/jugador', jugador);
+app.use('/equipo', equipo);
+app.use('/admin', admin);
+app.use('/cronica', cronica);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
