@@ -168,39 +168,43 @@ router.get('/clasificacion/:id/:jornada', function(req, res, next) {
         request(_equipo.clasificacionUrl + jornada_concat + req.params.jornada, function(error, response, html) {
             if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
-
-                $('table.fcftable-e tbody tr').each(function(i, element) {
-                    equipo = {
-                        posicion: "",
-                        nombre: "",
-                        puntos: "",
-                        jugados: "",
-                        csc: false,
-                        partidos: {
-                            ganados: "",
-                            empatados: "",
-                            perdidos: ""
-                        },
-                        goles: {
-                            favor: "",
-                            contra: ""
+                if ($('table.fcftable-e tbody tr').length === 0) {
+                    res.status(404);
+                    res.send({ message: 'Error from FCF' })
+                } else {
+                    $('table.fcftable-e tbody tr').each(function(i, element) {
+                        equipo = {
+                            posicion: "",
+                            nombre: "",
+                            puntos: "",
+                            jugados: "",
+                            csc: false,
+                            partidos: {
+                                ganados: "",
+                                empatados: "",
+                                perdidos: ""
+                            },
+                            goles: {
+                                favor: "",
+                                contra: ""
+                            }
+                        };
+                        equipo.posicion = $(this).find('td:nth-child(1)').text();
+                        equipo.nombre = $(this).find('td:nth-child(4)').text();
+                        equipo.puntos = $(this).find('td:nth-child(5)').text();
+                        equipo.jugados = $(this).find('td:nth-child(6)').text();
+                        equipo.partidos.ganados = $(this).find('td:nth-child(7)').text();
+                        equipo.partidos.empatados = $(this).find('td:nth-child(8)').text();
+                        equipo.partidos.perdidos = $(this).find('td:nth-child(9)').text();
+                        equipo.goles.favor = $(this).find('td:nth-child(18)').text();
+                        equipo.goles.contra = $(this).find('td:nth-child(19)').text();
+                        if ((equipo.nombre === _equipo.nombreToSearch)) {
+                            equipo.csc = true
                         }
-                    };
-                    equipo.posicion = $(this).find('td:nth-child(1)').text();
-                    equipo.nombre = $(this).find('td:nth-child(4)').text();
-                    equipo.puntos = $(this).find('td:nth-child(5)').text();
-                    equipo.jugados = $(this).find('td:nth-child(6)').text();
-                    equipo.partidos.ganados = $(this).find('td:nth-child(7)').text();
-                    equipo.partidos.empatados = $(this).find('td:nth-child(8)').text();
-                    equipo.partidos.perdidos = $(this).find('td:nth-child(9)').text();
-                    equipo.goles.favor = $(this).find('td:nth-child(18)').text();
-                    equipo.goles.contra = $(this).find('td:nth-child(19)').text();
-                    if ((equipo.nombre === _equipo.nombreToSearch)) {
-                        equipo.csc = true
-                    }
-                    json.push(equipo);
-                });
-                res.json(json);
+                        json.push(equipo);
+                    });
+                    res.json(json);
+                }
             }
         });
     });
@@ -225,27 +229,32 @@ router.get('/resultados/:id/:jornada', function(req, res, next) {
         request(_equipo.resultadosUrl + jornada_concat + req.params.jornada, function(error, response, html) {
             if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
-                $('tr.linia').each(function(i, element) {
-                    partido = {
-                        local: "",
-                        visitante: "",
-                        resultado: "",
-                        fecha: "",
-                        lugar: "",
-                        csc: false
-                    };
+                if ($('tr.linia').length === 0) {
+                    res.status(404);
+                    res.send({ message: 'Error from FCF' })
+                } else {
+                    $('tr.linia').each(function(i, element) {
+                        partido = {
+                            local: "",
+                            visitante: "",
+                            resultado: "",
+                            fecha: "",
+                            lugar: "",
+                            csc: false
+                        };
 
-                    partido.local = $(this).find('td.p-5.resultats-w-equip.tr a').text();
-                    partido.visitante = $(this).find('tr.linia td.p-5.resultats-w-equip.tl a').text();
-                    partido.resultado = $(this).find('tr.linia td.p-5.resultats-w-resultat.tc a div.tc.fs-17').text();
-                    partido.fecha = $(this).find('tr.linia td.p-5.resultats-w-resultat.tc a div.tc.fs-9').text();
-                    partido.lugar = $(this).find('tr.linia td.p-5.resultats-w-text2.tr.fs-9 a').text();
-                    if ((partido.local === _equipo.nombreToSearch) || (partido.visitante === _equipo.nombreToSearch)) {
-                        partido.csc = true
-                    }
-                    json.push(partido);
-                });
-                res.json(json);
+                        partido.local = $(this).find('td.p-5.resultats-w-equip.tr a').text();
+                        partido.visitante = $(this).find('tr.linia td.p-5.resultats-w-equip.tl a').text();
+                        partido.resultado = $(this).find('tr.linia td.p-5.resultats-w-resultat.tc a div.tc.fs-17').text();
+                        partido.fecha = $(this).find('tr.linia td.p-5.resultats-w-resultat.tc a div.tc.fs-9').text();
+                        partido.lugar = $(this).find('tr.linia td.p-5.resultats-w-text2.tr.fs-9 a').text();
+                        if ((partido.local === _equipo.nombreToSearch) || (partido.visitante === _equipo.nombreToSearch)) {
+                            partido.csc = true
+                        }
+                        json.push(partido);
+                    });
+                    res.json(json);
+                }
             }
         });
     });
@@ -264,38 +273,42 @@ router.get('/calendario/:id', function(req, res, next) {
         request(_equipo.calendarioUrl, function(error, response, html) {
             if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(html);
-
-                $('table.calendaritable').each(function(i, element) {
-                    jornada = {
-                        numero: "",
-                        fecha: "",
-                        partidos: []
-                    };
-
-                    jornada.numero = $(this).find('thead tr th:first-child').text();
-                    jornada.fecha = $(this).find('thead tr th:last-child').text();
-
-                    $(this).find('tbody tr').each(function(i, e) {
-                        partido = {
-                            local: "",
-                            visitante: "",
-                            res_local: "",
-                            res_visitante: "",
-                            csc: false
+                if ($('table.calendaritable').length === 0) {
+                    res.status(404);
+                    res.send({ message: 'Error from FCF' })
+                } else {
+                    $('table.calendaritable').each(function(i, element) {
+                        jornada = {
+                            numero: "",
+                            fecha: "",
+                            partidos: []
                         };
 
-                        partido.local = $(this).find('td:first-child a').text();
-                        partido.visitante = $(this).find('td:last-child a').text();
-                        partido.res_local = $(this).find('td:nth-child(3)').text();
-                        partido.res_visitante = $(this).find('td:nth-child(5)').text();
-                        if ((partido.local === _equipo.nombreToSearch) || (partido.visitante === _equipo.nombreToSearch)) {
-                            partido.csc = true
-                        }
-                        jornada.partidos.push(partido);
+                        jornada.numero = $(this).find('thead tr th:first-child').text();
+                        jornada.fecha = $(this).find('thead tr th:last-child').text();
+
+                        $(this).find('tbody tr').each(function(i, e) {
+                            partido = {
+                                local: "",
+                                visitante: "",
+                                res_local: "",
+                                res_visitante: "",
+                                csc: false
+                            };
+
+                            partido.local = $(this).find('td:first-child a').text();
+                            partido.visitante = $(this).find('td:last-child a').text();
+                            partido.res_local = $(this).find('td:nth-child(3)').text();
+                            partido.res_visitante = $(this).find('td:nth-child(5)').text();
+                            if ((partido.local === _equipo.nombreToSearch) || (partido.visitante === _equipo.nombreToSearch)) {
+                                partido.csc = true
+                            }
+                            jornada.partidos.push(partido);
+                        });
+                        json.push(jornada);
                     });
-                    json.push(jornada);
-                });
-                res.json(json);
+                    res.json(json);
+                }
             }
         });
     });
@@ -320,9 +333,12 @@ router.get('/jornada/:id/:jornada', function(req, res, next) {
     Equipo.findById(req.params.id).exec(function(err, equipo) {
         if (err) return next(err);
         _equipo = equipo;
-        request(_equipo.resultadosUrl + jornada_concat + req.params.jornada, function(error, response, html) {
+        request(_equipo.resultadosUrl + jornada_concat + req.params.jornada, { timeout: 3000 }, function(error, response, html) {
             if (!error && response.statusCode === 200) {
                 var $ = cheerio.load(html);
+                if ($('tr.linia').length === 0) {
+                    res.status(404).send({ message: 'Error from FCF' })
+                }
                 $('tr.linia').each(function(i, element) {
                     partido = {
                         categoria: "",
@@ -332,7 +348,6 @@ router.get('/jornada/:id/:jornada', function(req, res, next) {
                         fecha: "",
                         lugar: ""
                     };
-
                     partido.categoria = _equipo.nombre;
                     partido.local = $(this).find('td.p-5.resultats-w-equip.tr a').text();
                     partido.visitante = $(this).find('tr.linia td.p-5.resultats-w-equip.tl a').text();
