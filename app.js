@@ -34,7 +34,7 @@ var options = {
 };
 
 
-mongoose.connect('mongodb://localhost:27017/cscfutsaldb1920', options, function(err, res) {
+mongoose.connect('mongodb://mongo:27017/cscfutsaldb1920', options, function(err, res) {
     if (err) throw err;
     console.log('Connected to database');
 });
