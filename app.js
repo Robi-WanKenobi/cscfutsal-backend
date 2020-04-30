@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var corsOptions = {
     // origin: /localhost/,
     // origin: /cscfutsal\.com$/,
-    origin: /cscfutsal$/,
+    origin: [/cscfutsal\.com$/, /cscfutsal-54ac3\.web.app$/],
     methods: "GET,POST,PUT,DELETE",
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
