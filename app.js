@@ -15,7 +15,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var corsOptions = {
     // origin: /localhost/,
-    origin: /cscfutsal\.com$/,
+    // origin: /cscfutsal\.com$/,
+    origin: /cscfutsal-54ac3\.web.app$/,
     methods: "GET,POST,PUT,DELETE",
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
@@ -34,7 +35,7 @@ var options = {
 };
 
 
-mongoose.connect('mongodb://mongo:27017/cscfutsaldb1920', options, function(err, res) {
+mongoose.connect('mongodb://localhost:27017/cscfutsaldb1920', options, function(err, res) {
     if (err) throw err;
     console.log('Connected to database');
 });
